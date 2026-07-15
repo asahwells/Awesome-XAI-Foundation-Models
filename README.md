@@ -1,29 +1,29 @@
-# 🔍 Awesome Foundation Models for eXplainable AI [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/YOUR-USERNAME/Awesome-XAI-Foundation-Models/pulls)
+# 🔍 Awesome Foundation Models for eXplainable AI [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/asahwells/Awesome-XAI-Foundation-Models/pulls)
 
-Foundation models such as CLIP, DINO, and SAM have transformed computer vision, but their internal representations remain largely opaque. Existing eXplainable AI (xAI) methods — LIME, SHAP, Grad-CAM — explain *individual predictions*, yet say little about *what a model has actually encoded* in its learned latent space.
+Foundation models such as CLIP have transformed computer vision, but their internal representations remain opaque. Existing eXplainable AI (xAI) methods — LIME, SHAP, Grad-CAM — explain *individual predictions*, yet say little about *what a model has actually encoded* in its learned latent space.
 
-This repository curates **foundation models, xAI methods, datasets, and tools for representation-level explainability**, and provides a hands-on tutorial for **SVD-LTE (Latent-Space Top-Eigenvector Analysis)** — a unified global explanation framework that shifts explainability from prediction-space to representation-space.
+This repository provides a hands-on tutorial for **SVD-LTE (Latent-Space Top-Eigenvector Analysis)** — a unified global explanation framework that shifts explainability from prediction-space to representation-space — demonstrated end-to-end on a pretrained CLIP encoder.
 
-> **🎓 Tutorial**: [SVD-LTE on CLIP](#-tutorial-svd-lte-on-clip) — a complete, runnable walkthrough applying SVD-LTE to a pretrained CLIP ViT-B/32 encoder.
+> **🎓 Start here**: [Tutorial — SVD-LTE on CLIP](#-tutorial-svd-lte-on-clip)
 
 ---
 
-## 🗺️ Landscape of Explainability for Foundation Models
+## 🗺️ Landscape
 
-The field can be organised into three converging directions:
+Explainability for foundation models divides into two directions:
 
-1. **Prediction-Level xAI**: Explaining *why a model produced a specific output* for a specific input (LIME, SHAP, Grad-CAM, Integrated Gradients)
-2. **Representation-Level xAI**: Explaining *what information is encoded in the learned latent manifold*, how it evolves, and whether it carries bias or drift vulnerabilities (SVD-LTE, TCAV, probing classifiers, sparse autoencoders)
-3. **Evaluation of Explanations**: Quantifying whether explanations are faithful, stable, and useful (faithfulness metrics, sanity checks, human-grounded studies)
+**1. Prediction-Level xAI** — explains *why a model produced a specific output for a specific input*. Local by construction. LIME, SHAP, Grad-CAM, Integrated Gradients.
 
-SVD-LTE sits in direction **(2)** and contributes measurable metrics to direction **(3)**.
+**2. Representation-Level xAI** — explains *what information is encoded in the learned latent manifold*, how stable it is, and whether it carries bias or drift vulnerabilities. Global by construction.
+
+SVD-LTE sits in direction **(2)**, and contributes quantitative metrics that direction **(1)** currently lacks.
 
 ---
 
 ## 📌 Table of Contents
 
-- [🗺️ Landscape](#️-landscape-of-explainability-for-foundation-models)
-- [📚 Surveys & Reviews](#-surveys--reviews)
+- [🗺️ Landscape](#️-landscape)
+- [📚 Background](#-background)
 - [🎓 Tutorial: SVD-LTE on CLIP](#-tutorial-svd-lte-on-clip)
   * [Why SVD-LTE](#why-svd-lte)
   * [Quick Start](#quick-start)
@@ -36,24 +36,23 @@ SVD-LTE sits in direction **(2)** and contributes measurable metrics to directio
   * [Step 7 — Attribution: What Does Each PC Look For?](#step-7--attribution-what-does-each-pc-look-for)
   * [Step 8 — Explainability: Attribution Entropy](#step-8--explainability-attribution-entropy)
 - [📊 Results: CLIP ViT-B/32 on CIFAR-10](#-results-clip-vit-b32-on-cifar-10)
-- [🔬 Datasets, Benchmarks & Tools](#-datasets-benchmarks--tools)
-- [🧩 Prediction-Level xAI Methods](#-prediction-level-xai-methods)
-- [🌐 Representation-Level xAI Methods](#-representation-level-xai-methods)
-- [🏗️ Foundation Models](#️-foundation-models)
 - [‼️ Open Challenges](#️-open-challenges)
 - [🤝 Contributing](#-contributing)
 - [📄 Citation](#-citation)
 
 ---
 
-## 📚 Surveys & Reviews
+## 📚 Background
 
-- **[Intelligent Systems with Applications, 2026]** Explaining explainability: A comprehensive survey on explainable artificial intelligence and relevant industry applications [[paper]](https://doi.org/10.1016/j.iswa.2026.200647)
+The methods and limitations this framework responds to:
+
+- **[Intelligent Systems with Applications, 2026]** Explaining explainability: A comprehensive survey on explainable artificial intelligence and relevant industry applications [[paper]](https://doi.org/10.1016/j.iswa.2026.200647) — *the survey identifying the gaps SVD-LTE addresses*
 - **[Information Fusion, 2020]** Explainable Artificial Intelligence (XAI): Concepts, taxonomies, opportunities and challenges toward responsible AI [[paper]](https://doi.org/10.1016/j.inffus.2019.12.012)
-- **[IEEE Access, 2018]** Peeking inside the black-box: A survey on explainable artificial intelligence (XAI) [[paper]](https://doi.org/10.1109/ACCESS.2018.2870052)
-- **[Artificial Intelligence Review, 2022]** Explainable artificial intelligence: a comprehensive review [[paper]](https://doi.org/10.1007/s10462-021-10088-y)
-- **[Arxiv, 2024]** Explainable artificial intelligence: A survey of needs, techniques, applications, and future direction [[paper]](https://doi.org/10.1016/j.neucom.2024.128111)
-- **[Arxiv, 2017]** Towards a rigorous science of interpretable machine learning [[paper]](https://arxiv.org/abs/1702.08608)
+- **[ACM SIGKDD, 2016]** "Why should I trust you?": Explaining the predictions of any classifier (**LIME**) [[paper]](https://arxiv.org/abs/1602.04938) [[code]](https://github.com/marcotcr/lime)
+- **[NeurIPS, 2017]** A unified approach to interpreting model predictions (**SHAP**) [[paper]](https://arxiv.org/abs/1705.07874) [[code]](https://github.com/shap/shap)
+- **[ICML, 2017]** Axiomatic attribution for deep networks (**Integrated Gradients**) [[paper]](https://arxiv.org/abs/1703.01365)
+- **[IJCV, 2019]** Grad-CAM: Visual explanations from deep networks via gradient-based localization [[paper]](https://arxiv.org/abs/1610.02391)
+- **[ICML, 2021]** Learning transferable visual models from natural language supervision (**CLIP**) [[paper]](https://arxiv.org/abs/2103.00020) [[code]](https://github.com/mlfoundations/open_clip) — *the backbone analysed in this tutorial*
 
 ---
 
@@ -67,7 +66,7 @@ Current xAI faces five well-documented limitations. SVD-LTE addresses each:
 |---|--------------------------|--------------------|
 | 1 | **Local, not global** — LIME/SHAP/Grad-CAM explain one sample at a time | Explains the *whole latent manifold* via principal directions learned from thousands of samples |
 | 2 | **No representation-level explainability** — few methods explain latent embeddings | Explicitly explains latent factors, dimensions, and structure via principal directions, prototypes, and attribution maps |
-| 3 | **No standardised evaluation metrics** | Introduces quantitative metrics: Fairness (AUC per PC, LDS, Mahalanobis Distance); Robustness (DSR, Latent Drift Vector); Stability (Cross-Epoch Alignment, Jacobian Norm); Explainability (Attribution Entropy) |
+| 3 | **No standardised evaluation metrics** | Introduces quantitative metrics — Fairness (AUC per PC, LDS, Mahalanobis Distance); Robustness (DSR, Latent Drift Vector); Stability (Cross-Run Alignment, Jacobian Norm); Explainability (Attribution Entropy) |
 | 4 | **Explanation instability** — LIME variance, SHAP variance, gradient noise | Principal directions are estimated from thousands of samples and are statistically far more stable; stability is itself measured |
 | 5 | **Explainability–accuracy trade-off** — interpretable models sacrifice performance | Fully post-training. No retraining, no architecture change. Accuracy unchanged; explainability added afterwards |
 
@@ -79,7 +78,7 @@ pip install open_clip_torch torch torchvision numpy scipy scikit-learn matplotli
 
 Or open the tutorial directly in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/YOUR-NOTEBOOK-LINK)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1de5x85nBcFXRol7O7hL6IDS-2ZAFMp9o?usp=sharing)
 
 > **Note**: a GPU runtime is strongly recommended. Extracting latents for 10,000 images on CPU is slow.
 
@@ -109,14 +108,14 @@ class CLIPEncoder(nn.Module):
         self.latent_dim = 512
 
     def forward(self, x, return_latent=False):
-        # Gradients must flow — attribution methods depend on them.
+        # Gradients must flow — the attribution methods in Step 7 depend on them.
         h = self.clip_model.encode_image(x)
         return (None, h) if return_latent else h
 
 model = CLIPEncoder(clip_model).to(DEVICE)
 ```
 
-> **Swapping the backbone**: to analyse a different foundation model, replace only this cell. Everything downstream is unchanged — that is the point of a model-agnostic framework.
+> **Swapping the backbone**: to analyse a different foundation model, replace only this cell. Everything downstream is unchanged — this is what "model-agnostic" means in practice.
 
 ---
 
@@ -154,6 +153,8 @@ Z, y = get_latent(model, DEVICE, test_loader)
 print(Z.shape)   # (10000, 512)
 ```
 
+> The normalisation constants are CLIP's own training statistics. Using different values silently degrades every downstream result.
+
 ---
 
 ### Step 3 — Find the Top Eigenvectors with SVD
@@ -178,13 +179,15 @@ for i, e in enumerate(explained[:K_PCS]):
     print(f"PC{i}: {e*100:.2f}%")
 ```
 
+> Centring is not optional. SVD on uncentred data returns the mean as the first component, not the dominant direction of *variation*.
+
 ---
 
 ### Step 4 — Fairness: Do PCs Encode Protected Attributes?
 
 Define two groups and ask whether any single PC separates them. If a PC separates groups the model was never told about, that group structure is **encoded in the representation**.
 
-In this tutorial the groups are semantic (animals vs vehicles). In a fairness audit they would be protected attributes (e.g. perceived gender, age, skin tone).
+In this tutorial the groups are semantic (animals vs vehicles). In a fairness audit they would be protected attributes.
 
 ```python
 from sklearn.metrics import roc_auc_score
@@ -221,7 +224,7 @@ MD = mahalanobis_groups(A, B)
 print(f"AUC per PC: {aucs.round(3)}\nLDS: {LDS:.4f}\nMahalanobis: {MD:.4f}")
 ```
 
-**Reading the numbers**: AUC ≈ 0.5 → the PC carries no group information. AUC → 1.0 → the PC almost perfectly separates the groups, meaning the concept is strongly encoded.
+**Reading the numbers**: AUC ≈ 0.5 → the PC carries no group information. AUC → 1.0 → the PC almost perfectly separates the groups, meaning the concept is strongly encoded. The three metrics are complementary: AUC is per-direction, LDS aggregates separation across directions, and Mahalanobis measures the distance between group centroids in the full space.
 
 ---
 
@@ -241,7 +244,7 @@ def make_shifted_loader(loader, noise_std=0.20):
 Z_clean, _ = get_latent(model, DEVICE, test_loader)
 Z_shift, _ = get_latent(model, DEVICE, make_shifted_loader(test_loader))
 
-# Latent Drift Vector
+# Latent Drift Vector: where did the centre of the cloud move to?
 delta_vec = Z_shift.mean(0) - Z_clean.mean(0)
 delta_dir = delta_vec / (np.linalg.norm(delta_vec) + 1e-8)
 
@@ -254,7 +257,7 @@ U_shift, _, _ = np.linalg.svd(cov_shift)
 DSR = np.array([pcs_final[:, k] @ U_shift[:, k] for k in range(K_PCS)])
 ```
 
-**Reading the numbers**: DSR near ±1 → that PC survived the shift (robust). DSR near 0 → that PC collapsed (fragile). `shift_proj` localises *where* the drift landed.
+**Reading the numbers**: DSR near ±1 → that PC survived the shift (robust). DSR near 0 → that PC collapsed (fragile). `shift_proj` localises *where* the drift landed — which is more useful than a single global "is the model robust?" verdict.
 
 ---
 
@@ -277,13 +280,15 @@ pc_stability = np.stack([np.abs(np.diag(C)) for C in C_list]).mean(axis=0)
 pc_instability = 1.0 - pc_stability
 ```
 
-**Reading the numbers**: stability → 1.0 means the direction is essentially identical across runs. Lower values mean the direction wanders and should be trusted less.
+**Reading the numbers**: alignment → 1.0 means the direction is essentially identical across runs. Lower values mean the direction wanders between samples and should be trusted less. The absolute value is used because an eigenvector and its negation describe the same direction.
 
 ---
 
 ### Step 7 — Attribution: What Does Each PC Look For?
 
-Project the latent onto a PC to get a single score, then ask which input pixels drive that score. Three methods of increasing robustness are provided as a cross-check.
+Project the latent onto a PC to get a single score, then ask which input pixels drive that score. Every pixel is a dial; the gradient answers *"if I nudge this dial, how much does the score move?"*
+
+Three methods of increasing robustness are provided as a cross-check — if they agree, the finding is trustworthy.
 
 ```python
 def pc_tensor(v):
@@ -293,7 +298,7 @@ def reduce_to_2d(t):
     return t.mean(dim=0) if t.ndim == 3 else t
 
 def signed_gradient_saliency(model, pc_vec, x):
-    """One gradient measurement at the input point."""
+    """One gradient measurement at the input point. Fast, noisy."""
     x = x.clone().to(DEVICE).requires_grad_(True)
     _, h = model(x, return_latent=True)
     (h @ pc_tensor(pc_vec)).sum().backward()
@@ -312,7 +317,7 @@ def integrated_gradients(model, pc_vec, x, steps=30):
     return reduce_to_2d(((x - baseline) * (total / steps)).cpu()[0]).numpy()
 
 def gradient_shap_like(model, pc_vec, x, n_samples=30):
-    """Average gradients over randomly sampled interpolation points."""
+    """Average gradients over randomly sampled interpolation points. Most robust."""
     x = x.clone().to(DEVICE)
     total = torch.zeros_like(x)
     for _ in range(n_samples):
@@ -323,7 +328,7 @@ def gradient_shap_like(model, pc_vec, x, n_samples=30):
     return reduce_to_2d((total / n_samples).cpu()[0]).numpy()
 
 def optimize_prototype(model, pc_vec, shape, steps=200, lr=0.05):
-    """Synthesise the image that maximally activates a PC."""
+    """Synthesise the image that maximally activates a PC — the PC's 'dream image'."""
     x = torch.randn(shape, device=DEVICE, requires_grad=True)
     opt = torch.optim.Adam([x], lr=lr)
     for _ in range(steps):
@@ -333,6 +338,8 @@ def optimize_prototype(model, pc_vec, shape, steps=200, lr=0.05):
         opt.step()
     return x.detach().cpu()[0].mean(dim=0).numpy()   # average RGB → viewable
 ```
+
+> **Common pitfall**: wrapping the encoder's forward pass in `torch.no_grad()` will silently break all four functions above with `element 0 of tensors does not require grad`. Gradients must be able to flow back to the input.
 
 ---
 
@@ -347,7 +354,7 @@ def attribution_entropy(a):
     return -(a * np.log(a + 1e-8)).sum()
 ```
 
-**Calibrating the scale**: for a 224 × 224 map, perfectly uniform attribution gives `ln(50176) ≈ 10.82`. A value near 10.8 means the explanation is spread across the entire image; substantially lower means it is localised.
+**Calibrating the scale**: for a 224 × 224 map, perfectly uniform attribution gives `ln(50176) ≈ 10.82` — the theoretical maximum. A value near 10.8 means the explanation is spread across the entire image; substantially lower means it is localised. Without this anchor the raw number is uninterpretable.
 
 ---
 
@@ -391,7 +398,7 @@ PC0–PC4 achieve cross-run alignment of roughly **0.9–1.0**, tapering to ~0.7
 
 ### Explainability — a ViT signature
 
-Attribution entropy across all PCs: **9.96 – 10.21** (theoretical maximum 10.82). Attribution is diffuse for *every* component, consistent with ViT patch tokenisation distributing representation across spatial tokens. PC7 is highest (10.21), matching its high-frequency texture prototype; PC1 is lowest (9.96).
+Attribution entropy across all PCs: **9.96 – 10.21** (theoretical maximum 10.82). Attribution is diffuse for *every* component, consistent with ViT patch tokenisation distributing representation across spatial tokens. PC7 is highest (10.21), matching its high-frequency texture prototype; PC1 is lowest (9.96). PC0 by contrast is object-level — the contrast between the two illustrates that SVD-LTE can distinguish semantic from textural components.
 
 ### Metric independence — each metric earns its place
 
@@ -401,80 +408,9 @@ Attribution entropy across all PCs: **9.96 – 10.21** (theoretical maximum 10.8
 | Entropy × Prototype norm | 0.114 | 0.018 |
 | Instability × Prototype norm | 0.129 | 0.224 |
 
-All |r| < 0.13. Stability, interpretability, and semantic strength vary **independently** — so each metric family captures a distinct, non-redundant property of the representation. This is evidence that the framework is not over-specified.
+All |r| < 0.13. Stability, interpretability, and semantic strength vary **independently** — so each metric family captures a distinct, non-redundant property of the representation. Had they correlated strongly, the framework would be measuring one thing three times.
 
 > **Limitations**: attribution maps are computed on a single representative image per PC and are illustrative rather than population-level. Correlations are estimated from K = 10 components, so they indicate *no evidence of a relationship* rather than proven independence. Results are reported for one backbone and one dataset.
-
----
-
-## 🔬 Datasets, Benchmarks & Tools
-
-### Datasets used in representation-level analysis
-
-| Dataset | Modality | Scale | Typical use | Link |
-|---------|----------|-------|-------------|------|
-| **CIFAR-10** | `Image` | 60K | Semantic structure, quick iteration | [[dataset]](https://www.cs.toronto.edu/~kriz/cifar.html) |
-| **CIFAR-100** | `Image` | 60K | Finer-grained concept structure | [[dataset]](https://www.cs.toronto.edu/~kriz/cifar.html) |
-| **CelebA** | `Image` | 200K | Attribute and fairness auditing | [[dataset]](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) |
-| **FairFace** | `Image` | 108K | Balanced demographic auditing | [[dataset]](https://github.com/joojs/fairface) |
-| **ImageNet** | `Image` | 1.2M | Large-scale semantic structure | [[dataset]](https://www.image-net.org/) |
-| **Waterbirds** | `Image` | 11K | Spurious correlation / background bias | [[dataset]](https://github.com/kohpangwei/group_DRO) |
-
-### Tools
-
-| Tool | Purpose | Link |
-|------|---------|------|
-| **open_clip** | Open CLIP implementations and pretrained weights | [[tool]](https://github.com/mlfoundations/open_clip) |
-| **Captum** | Model interpretability library for PyTorch | [[tool]](https://captum.ai/) |
-| **SHAP** | Shapley-value attribution | [[tool]](https://github.com/shap/shap) |
-| **LIME** | Local surrogate explanations | [[tool]](https://github.com/marcotcr/lime) |
-| **Quantus** | Quantitative evaluation of explanations | [[tool]](https://github.com/understandable-machine-intelligence-lab/Quantus) |
-| **timm** | Pretrained image model zoo | [[tool]](https://github.com/huggingface/pytorch-image-models) |
-
----
-
-## 🧩 Prediction-Level xAI Methods
-
-*Explaining individual model outputs. Local by construction.*
-
-- **[ACM SIGKDD, 2016]** "Why should I trust you?": Explaining the predictions of any classifier (**LIME**) [[paper]](https://arxiv.org/abs/1602.04938) [[code]](https://github.com/marcotcr/lime)
-- **[NeurIPS, 2017]** A unified approach to interpreting model predictions (**SHAP**) [[paper]](https://arxiv.org/abs/1705.07874) [[code]](https://github.com/shap/shap)
-- **[ICML, 2017]** Axiomatic attribution for deep networks (**Integrated Gradients**) [[paper]](https://arxiv.org/abs/1703.01365)
-- **[IJCV, 2019]** Grad-CAM: Visual explanations from deep networks via gradient-based localization [[paper]](https://arxiv.org/abs/1610.02391)
-- **[AAAI, 2018]** Anchors: High-precision model-agnostic explanations [[paper]](https://doi.org/10.1609/aaai.v32i1.11491)
-- **[PLOS ONE, 2015]** On pixel-wise explanations for non-linear classifier decisions by layer-wise relevance propagation (**LRP**) [[paper]](https://doi.org/10.1371/journal.pone.0130140)
-- **[Annals of Statistics, 2001]** Greedy function approximation: A gradient boosting machine (**PDP**) [[paper]](https://doi.org/10.1214/aos/1013203451)
-- **[JCGS, 2015]** Peeking inside the black box: Visualizing statistical learning with plots of individual conditional expectation (**ICE**) [[paper]](https://doi.org/10.1080/10618600.2014.907095)
-- **[Arxiv, 2017]** Counterfactual explanations without opening the black box [[paper]](https://arxiv.org/abs/1711.00399)
-
----
-
-## 🌐 Representation-Level xAI Methods
-
-*Explaining what is encoded in the latent manifold. Global by construction.*
-
-- **SVD-LTE (Latent-Space Top-Eigenvector Analysis)** — unified global explanation via top eigenvectors of the latent space, with quantitative fairness, robustness, stability, and explainability metrics. **[This repository](#-tutorial-svd-lte-on-clip)**
-- **[ICML, 2018]** Interpretability beyond feature attribution: Quantitative testing with concept activation vectors (**TCAV**) [[paper]](https://arxiv.org/abs/1711.11279)
-- **[JMLR, 2008]** Visualizing data using t-SNE [[paper]](https://www.jmlr.org/papers/v9/vandermaaten08a.html)
-- **[Arxiv, 2018]** UMAP: Uniform manifold approximation and projection [[paper]](https://arxiv.org/abs/1802.03426)
-- **[Arxiv, 2024]** Scaling and evaluating sparse autoencoders [[paper]](https://arxiv.org/abs/2406.04093)
-- **[ICLR, 2019]** Towards robust interpretability with self-explaining neural networks (**SENN**) [[paper]](https://arxiv.org/abs/1806.07538)
-- **[Arxiv, 2018]** GAN Dissection: Visualizing and understanding generative adversarial networks [[paper]](https://arxiv.org/abs/1811.10597)
-
----
-
-## 🏗️ Foundation Models
-
-*Backbones whose latent spaces are candidates for representation-level analysis.*
-
-| Model | Modality | Latent dim | Analysed here | Paper | Code |
-|-------|----------|------------|---------------|-------|------|
-| **CLIP ViT-B/32** | `Image` `Text` | 512 | ✅ | [[paper]](https://arxiv.org/abs/2103.00020) | [[code]](https://github.com/mlfoundations/open_clip) |
-| **CLIP ViT-L/14** | `Image` `Text` | 768 | — | [[paper]](https://arxiv.org/abs/2103.00020) | [[code]](https://github.com/mlfoundations/open_clip) |
-| **DINOv2** | `Image` | 384–1536 | — | [[paper]](https://arxiv.org/abs/2304.07193) | [[code]](https://github.com/facebookresearch/dinov2) |
-| **SAM** | `Image` | 256 | — | [[paper]](https://arxiv.org/abs/2304.02643) | [[code]](https://github.com/facebookresearch/segment-anything) |
-| **SigLIP** | `Image` `Text` | 768 | — | [[paper]](https://arxiv.org/abs/2303.15343) | [[code]](https://github.com/google-research/big_vision) |
-| **StyleGAN** | `Image` | 512 | — | [[paper]](https://arxiv.org/abs/1812.04948) | [[code]](https://github.com/NVlabs/stylegan3) |
 
 ---
 
@@ -495,7 +431,6 @@ Contributions are welcome. Please:
 
 - Follow the format: `**[Venue Year]** Title [[paper]](link) [[code]](link)`
 - Focus on explainability for foundation models (not general ML papers)
-- Place entries under the correct direction (prediction-level vs representation-level)
 - Open an issue or submit a PR
 
 ---
@@ -510,10 +445,8 @@ If this repository or the tutorial is useful in your work, please cite:
             Latent-Space Top-Eigenvector Analysis of Foundation Models},
   author = {Asah, Victor Kolapo and Yu, Hongchuan},
   year   = {2026},
-  note   = {MSc Data Science and Artificial Intelligence,
-            Department of Computing and Informatics,
-            Bournemouth University},
-  howpublished = {\url{https://github.com/YOUR-USERNAME/Awesome-XAI-Foundation-Models}}
+  note   = {Department of Computing and Informatics, Bournemouth University},
+  howpublished = {\url{https://github.com/asahwells/Awesome-XAI-Foundation-Models}}
 }
 ```
 
