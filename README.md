@@ -425,16 +425,6 @@ All |r| < 0.13. Stability, interpretability, and semantic strength vary **indepe
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome. Please:
-
-- Follow the format: `**[Venue Year]** Title [[paper]](link) [[code]](link)`
-- Focus on explainability for foundation models (not general ML papers)
-- Open an issue or submit a PR
-
----
-
 ## 📄 Citation
 
 If this repository or the tutorial is useful in your work, please cite:
