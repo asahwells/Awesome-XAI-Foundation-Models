@@ -114,9 +114,6 @@ class CLIPEncoder(nn.Module):
 
 model = CLIPEncoder(clip_model).to(DEVICE)
 ```
-
-> **Swapping the backbone**: to analyse a different foundation model, replace only this cell. Everything downstream is unchanged — this is what "model-agnostic" means in practice.
-
 ---
 
 ### Step 2 — Extract the Latent Space
