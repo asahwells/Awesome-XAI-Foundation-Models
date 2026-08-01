@@ -82,7 +82,7 @@ pip install open_clip_torch torch torchvision numpy scipy scikit-learn matplotli
 
 Or open the tutorial directly in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/YOUR-NOTEBOOK-LINK)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1de5x85nBcFXRol7O7hL6IDS-2ZAFMp9o#scrollTo=NNanYsF0LSgp)
 
 > **Note**: a GPU runtime is strongly recommended. Extracting latents for 10,000 images on CPU is slow.
 
@@ -434,33 +434,6 @@ All |r| < 0.13. Stability, interpretability, and semantic strength vary **indepe
 - **Non-technical accessibility**: eigenvectors, singular values, and entropy are not digestible for non-expert stakeholders
 - **Generative and multimodal models**: latent structure in LLMs and diffusion models remains largely unexplored at this level
 - **Post-deployment drift**: how the latent manifold shifts once real-world data arrives, and how to monitor it continuously
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome. Please:
-
-- Follow the format: `**[Venue Year]** Title [[paper]](link) [[code]](link)`
-- Focus on explainability for foundation models (not general ML papers)
-- Open an issue or submit a PR
-
----
-
-## 📄 Citation
-
-If this repository or the tutorial is useful in your work, please cite:
-
-```bibtex
-@misc{asah2026svdlte,
-  title  = {SVD-LTE: A Unified Global Explanation Method for
-            Latent-Space Top-Eigenvector Analysis of Foundation Models},
-  author = {Asah, Victor Kolapo and Yu, Hongchuan},
-  year   = {2026},
-  note   = {Department of Computing and Informatics, Bournemouth University},
-  howpublished = {\url{https://github.com/YOUR-USERNAME/Awesome-XAI-Foundation-Models}}
-}
-```
 
 ---
 
