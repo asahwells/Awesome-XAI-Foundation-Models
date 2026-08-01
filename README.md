@@ -1,4 +1,4 @@
-# 🔍 Awesome Foundation Models for eXplainable AI [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/asahwells/Awesome-XAI-Foundation-Models/pulls)
+# 🔍 Awesome Foundation Models for eXplainable AI [![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/YOUR-USERNAME/Awesome-XAI-Foundation-Models/pulls)
 
 Foundation models such as CLIP have transformed computer vision, but their internal representations remain opaque. Existing eXplainable AI (xAI) methods — LIME, SHAP, Grad-CAM — explain *individual predictions*, yet say little about *what a model has actually encoded* in its learned latent space.
 
@@ -17,6 +17,10 @@ Explainability for foundation models divides into two directions:
 **2. Representation-Level xAI** — explains *what information is encoded in the learned latent manifold*, how stable it is, and whether it carries bias or drift vulnerabilities. Global by construction.
 
 SVD-LTE sits in direction **(2)**, and contributes quantitative metrics that direction **(1)** currently lacks.
+
+![SVD-LTE pipeline overview](img/svdlte_pipeline.png)
+
+*The SVD-LTE pipeline: a frozen pretrained model produces a latent space, SVD extracts its top eigenvectors (the encoded patterns), and four quantitative metric families characterise fairness, robustness, stability, and explainability.*
 
 ---
 
@@ -78,7 +82,7 @@ pip install open_clip_torch torch torchvision numpy scipy scikit-learn matplotli
 
 Or open the tutorial directly in Colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1de5x85nBcFXRol7O7hL6IDS-2ZAFMp9o?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/YOUR-NOTEBOOK-LINK)
 
 > **Note**: a GPU runtime is strongly recommended. Extracting latents for 10,000 images on CPU is slow.
 
@@ -114,6 +118,9 @@ class CLIPEncoder(nn.Module):
 
 model = CLIPEncoder(clip_model).to(DEVICE)
 ```
+
+> **Swapping the backbone**: to analyse a different foundation model, replace only this cell. Everything downstream is unchanged — this is what "model-agnostic" means in practice.
+
 ---
 
 ### Step 2 — Extract the Latent Space
@@ -369,6 +376,8 @@ def attribution_entropy(a):
 
 PC0 separates animals from vehicles at **AUC 0.978**. CLIP was never given this grouping, yet its single most dominant latent direction encodes it almost perfectly. Prediction-level xAI cannot surface a finding of this kind.
 
+![AUC per principal component](img/auc_per_pc.png)
+
 ### Spectrum — no single direction dominates
 
 | PC | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
@@ -376,6 +385,8 @@ PC0 separates animals from vehicles at **AUC 0.978**. CLIP was never given this 
 | **Variance explained** | 13.66% | 7.94% | 5.58% | 4.74% | 3.68% | 3.28% | 3.00% | 2.56% | 2.21% | 2.06% |
 
 The top 10 PCs jointly explain **48.7%** of total variance — the representation is rich and distributed rather than collapsed onto one axis.
+
+![Variance explained per PC](img/scree.png)
 
 ### Robustness — the important directions survive
 
@@ -389,9 +400,13 @@ Gaussian perturbation, σ = 0.20:
 
 The most important directions (PC0, PC1) remain robust, while several lower-ranked directions reorganise. SVD-LTE localises *which* directions are fragile — not merely whether the model is robust overall.
 
+![Domain-Shift Response per PC](img/dsr_heatmap.png)
+
 ### Stability — top directions are reproducible
 
 PC0–PC4 achieve cross-run alignment of roughly **0.9–1.0**, tapering to ~0.75 for the lowest-ranked components. The dominant patterns are properties of the model, not of the sample.
+
+![PC stability across runs](img/stability.png)
 
 ### Explainability — a ViT signature
 
@@ -422,6 +437,16 @@ All |r| < 0.13. Stability, interpretability, and semantic strength vary **indepe
 
 ---
 
+## 🤝 Contributing
+
+Contributions are welcome. Please:
+
+- Follow the format: `**[Venue Year]** Title [[paper]](link) [[code]](link)`
+- Focus on explainability for foundation models (not general ML papers)
+- Open an issue or submit a PR
+
+---
+
 ## 📄 Citation
 
 If this repository or the tutorial is useful in your work, please cite:
@@ -433,7 +458,7 @@ If this repository or the tutorial is useful in your work, please cite:
   author = {Asah, Victor Kolapo and Yu, Hongchuan},
   year   = {2026},
   note   = {Department of Computing and Informatics, Bournemouth University},
-  howpublished = {\url{https://github.com/asahwells/Awesome-XAI-Foundation-Models}}
+  howpublished = {\url{https://github.com/YOUR-USERNAME/Awesome-XAI-Foundation-Models}}
 }
 ```
 
